@@ -1,6 +1,6 @@
-import App from "./App.svelte";
+import Break from "./Break.svelte";
 
-const app = new App({
+const app = new Break({
   target: document.getElementById("app"),
 });
 

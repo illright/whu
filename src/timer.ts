@@ -1,6 +1,7 @@
 import { linear } from "svelte/easing";
 import { tweened } from "svelte/motion";
 import type { Readable } from "svelte/store";
+import { formatDuration } from "date-fns";
 
 export interface Timer extends Readable<number> {
   start: () => void;
@@ -18,4 +19,29 @@ export function createTimer(durationMs: number): Timer {
     start: () => timer.set(0),
     subscribe: timer.subscribe,
   };
+}
+
+const listFormatter = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+});
+
+export function formatTime(timeSeconds: number) {
+  const duration = {
+    hours: Math.floor(timeSeconds / 3600),
+    minutes: Math.floor(timeSeconds / 60),
+    seconds: Math.floor(timeSeconds % 60),
+  };
+
+  return listFormatter.format(
+    formatDuration(duration, {
+      format: [
+        duration.hours !== 0 && "hours",
+        duration.hours < 2 && duration.minutes !== 0 && "minutes",
+        duration.hours === 0 && duration.minutes < 2 && "seconds",
+      ].filter(Boolean),
+      zero: true,
+      delimiter: "#",
+    }).split("#")
+  );
 }
