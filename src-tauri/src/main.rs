@@ -1,30 +1,33 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{ActivationPolicy, SystemTray, SystemTrayEvent};
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+use tauri::{ActivationPolicy, SystemTray};
+use tokio::time::{Duration, interval, MissedTickBehavior};
 
 fn main() {
     let tray = SystemTray::new();
     let mut app = tauri::Builder::default()
         .system_tray(tray)
-        .invoke_handler(tauri::generate_handler![greet])
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::LeftClick { .. } => {
-                tauri::WindowBuilder::new(app, "main", tauri::WindowUrl::App("index.html".into()))
+        .setup(|app| {
+            let app = app.handle();
+            tauri::async_runtime::spawn(async move {
+                let mut interval = interval(Duration::from_secs(5 * 60));
+                interval.set_missed_tick_behavior(MissedTickBehavior::Skip);
+                interval.tick().await;
+
+                loop {
+                    interval.tick().await;
+                    tauri::WindowBuilder::new(
+                        &app,
+                        "main",
+                        tauri::WindowUrl::App("index.html".into()),
+                    )
                     .title("WHU")
                     .build()
                     .expect("cannot build window");
-            }
-            _ => {}
-        })
-        .setup(|app| {
-            app.hide().expect("cannot hide app");
+                }
+            });
+
             Ok(())
         })
         .build(tauri::generate_context!())
