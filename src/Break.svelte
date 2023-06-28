@@ -1,14 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import IconBrain from "~icons/bxs/brain";
-  import IconBody from "~icons/bx/body";
-  import IconConversation from "~icons/bx/conversation";
-  import IconDumbbell from "~icons/bx/dumbbell";
+  // import IconBrain from "~icons/bxs/brain";
+  // import IconBody from "~icons/bx/body";
+  // import IconConversation from "~icons/bx/conversation";
+  // import IconDumbbell from "~icons/bx/dumbbell";
 
   import { createTimer, formatTime } from "./timer";
   import { closeWindow } from "./backend";
 
-  const durationMs = 60 * 2 * 1000;
+  const parameters = new URLSearchParams(location.search);
+
+  const durationMs = parseInt(parameters.get("duration") || "20", 10) * 1000;
   const timer = createTimer(durationMs);
 
   onMount(timer.start);
@@ -16,12 +18,9 @@
 </script>
 
 <main>
-  <h1>Breathing</h1>
-  <p class="hint-text">
-    Take 5 minutes to breathe deeply and focus on exhaling. It is known to
-    induce a sense of calmness and help you relieve stress.
-  </p>
-  <div class="hint-types">
+  <h1>{parameters.get("title")}</h1>
+  <p class="description">{parameters.get("description")}</p>
+  <!-- <div class="hint-types">
     <label>
       <input type="radio" name="hint-type" value="discreet" />
       <IconBrain />
@@ -38,7 +37,7 @@
       <input type="radio" name="hint-type" value="exercise" />
       <IconDumbbell />
     </label>
-  </div>
+  </div> -->
   <footer>
     <div class="text">
       <span id="remaining-time"
@@ -99,8 +98,8 @@
       --primary-components: 31, 206, 2;
       --text-components: 240, 246, 249;
       --gray-600: #999999;
-      --gray-300: #BDC0C1;
-      --background: #111C20;
+      --gray-300: #bdc0c1;
+      --background: #111c20;
     }
   }
 
@@ -112,14 +111,14 @@
     margin-bottom: 28px;
   }
 
-  .hint-text {
+  .description {
     line-height: 32px;
     text-align: center;
     max-width: 60%;
     margin-bottom: 56px;
   }
 
-  .hint-types {
+  /* .hint-types {
     display: flex;
     justify-content: space-between;
     gap: 40px;
@@ -146,7 +145,7 @@
 
   .hint-types :checked + :global(svg) {
     color: var(--primary);
-  }
+  } */
 
   footer {
     position: absolute;

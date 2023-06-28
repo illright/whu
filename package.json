@@ -21,6 +21,7 @@
     "@iconify-json/bxs": "^1.1.6",
     "@sveltejs/vite-plugin-svelte": "^2.4.1",
     "@tauri-apps/cli": "^1.4.0",
+    "@total-typescript/ts-reset": "^0.4.2",
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "^18.16.18",
     "svelte": "^3.59.1",
