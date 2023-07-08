@@ -14,7 +14,8 @@
     "@fontsource/fira-code": "^5.0.3",
     "@fontsource/work-sans": "^5.0.3",
     "@tauri-apps/api": "^1.4.0",
-    "date-fns": "^2.30.0"
+    "date-fns": "^2.30.0",
+    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1"
   },
   "devDependencies": {
     "@iconify-json/bx": "^1.1.6",

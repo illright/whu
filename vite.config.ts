@@ -2,9 +2,10 @@ import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import sveltePreprocess from "svelte-preprocess";
 import Icons from "unplugin-icons/vite";
+import { resolve } from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig(() => ({
   plugins: [
     svelte({
       preprocess: [
@@ -14,7 +15,7 @@ export default defineConfig(async () => ({
       ],
     }),
     Icons({
-      compiler: 'svelte',
+      compiler: "svelte",
     }),
   ],
 
@@ -30,6 +31,12 @@ export default defineConfig(async () => ({
   // https://tauri.studio/v1/api/config#buildconfig.beforedevcommand
   envPrefix: ["VITE_", "TAURI_"],
   build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        nested: resolve(__dirname, "settings.html"),
+      },
+    },
     // Tauri supports es2021
     target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
     // don't minify for debug builds
