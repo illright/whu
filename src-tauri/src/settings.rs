@@ -10,10 +10,10 @@ pub fn get_u64(app_handle: &AppHandle, key: &str, default: u64) -> u64 {
     tauri_plugin_store::with_store(
         app_handle.clone(),
         app_handle.state(),
-        PathBuf::from("settings.json"),
+        PathBuf::from(SETTINGS_PATH),
         |store| {
             store.get(key).and_then(|json| json.as_u64()).ok_or(
-                tauri_plugin_store::Error::NotFound(PathBuf::from("settings.json")),
+                tauri_plugin_store::Error::NotFound(PathBuf::from(SETTINGS_PATH)),
             )
         },
     )

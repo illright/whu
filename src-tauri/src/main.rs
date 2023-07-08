@@ -17,7 +17,12 @@ use urlencoding::Encoded;
 mod settings;
 
 mod system_tray {
+    use std::time::Duration;
+
+    use crate::settings::{self, SHORT_BREAK_PERIOD};
     use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem};
+    use tokio::time::Instant;
+
     pub const SKIP_TO_NEXT_SHORT_BREAK: &str = "skip_to_next_short_break";
     pub const TIME_UNTIL_SHORT_BREAK: &str = "time_until_short_break";
     pub const SETTINGS: &str = "settings";
@@ -38,14 +43,41 @@ mod system_tray {
             .add_item(quit);
         SystemTray::new().with_menu(tray_menu)
     }
+
+    pub fn calculate_time_until_break(app_handle: &tauri::AppHandle, last_break_instant: Instant) {
+        let item_handle = app_handle.tray_handle().get_item(TIME_UNTIL_SHORT_BREAK);
+
+        let short_break_period = settings::get_u64(app_handle, SHORT_BREAK_PERIOD, 5 * 60);
+        let next_break_instant =
+            last_break_instant.checked_add(Duration::from_secs(short_break_period));
+
+        if let Some(next_break_instant) = next_break_instant {
+            let time_to_next_break = next_break_instant - Instant::now();
+            item_handle
+                .set_title(format!(
+                    "Next short break in {}",
+                    approximate_duration(time_to_next_break)
+                ))
+                .expect("cannot set remaining time until next break in tray");
+        }
+    }
+
+    fn approximate_duration(duration: Duration) -> String {
+        let seconds = duration.as_secs();
+
+        if seconds < 60 {
+            String::from("about a minute")
+        } else {
+            let full_minutes = seconds / 60;
+            format!("about {} minutes", full_minutes + 1)
+        }
+    }
 }
 
 const BREAK_TITLE: &str = "Trust me, it works";
 const BREAK_DESCRIPTION: &str = "Take 5 minutes to breathe deeply and focus on exhaling. It is known to induce a sense of calmness and help you relieve stress.";
 
 fn main() {
-    use system_tray::{QUIT, SETTINGS, SKIP_TO_NEXT_SHORT_BREAK, TIME_UNTIL_SHORT_BREAK};
-
     let (last_break_tx, last_break_rx) = watch::channel::<Instant>(Instant::now());
     let (force_break_tx, mut force_break_rx) = mpsc::unbounded_channel::<Instant>();
 
@@ -101,37 +133,28 @@ fn main() {
         .on_system_tray_event(move |app_handle, event| match event {
             SystemTrayEvent::LeftClick { .. } => {
                 let last_instant = *last_break_rx.borrow();
-                let short_break_period = settings::get_u64(&app_handle, SHORT_BREAK_PERIOD, 5 * 60);
-                match last_instant.checked_add(Duration::from_secs(short_break_period)) {
-                    Some(next_break_instant) => {
-                        let time_to_next_break = next_break_instant - Instant::now();
-                        let item_handle = app_handle.tray_handle().get_item(TIME_UNTIL_SHORT_BREAK);
-                        item_handle
-                            .set_title(format!(
-                                "Time until break: {} seconds",
-                                time_to_next_break.as_secs()
-                            ))
-                            .expect("cannot set remaining time until next break in tray");
+                system_tray::calculate_time_until_break(&app_handle, last_instant);
+            }
+            SystemTrayEvent::MenuItemClick { id, .. } => {
+                use system_tray::{QUIT, SETTINGS, SKIP_TO_NEXT_SHORT_BREAK};
+
+                match id.as_str() {
+                    SKIP_TO_NEXT_SHORT_BREAK => {
+                        force_break_tx
+                            .send(Instant::now())
+                            .expect("cannot send skip to next break");
                     }
-                    None => {}
+                    QUIT => {
+                        app_handle.exit(0);
+                    }
+                    SETTINGS => {
+                        settings::create_window(app_handle)
+                            .build()
+                            .expect("cannot build settings window");
+                    }
+                    _ => {}
                 }
             }
-            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                SKIP_TO_NEXT_SHORT_BREAK => {
-                    force_break_tx
-                        .send(Instant::now())
-                        .expect("cannot send skip to next break");
-                }
-                QUIT => {
-                    app_handle.exit(0);
-                }
-                SETTINGS => {
-                    settings::create_window(app_handle)
-                        .build()
-                        .expect("cannot build settings window");
-                }
-                _ => {}
-            },
             _ => {}
         })
         .build(tauri::generate_context!())
