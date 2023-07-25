@@ -31,7 +31,7 @@ dependencies:
     version: 1.13.2
   tauri-plugin-store-api:
     specifier: github:tauri-apps/tauri-plugin-store#v1
-    version: github.com/tauri-apps/tauri-plugin-store/8a37f08e6c0b7781fc1f0e458f2d0ff18368ac75
+    version: github.com/tauri-apps/tauri-plugin-store/e08b8fdf6adb27a437b71ede4f7e572e7d11cc2d
 
 devDependencies:
   '@iconify-json/bx':
@@ -43,6 +43,9 @@ devDependencies:
   '@iconify-json/circle-flags':
     specifier: ^1.1.40
     version: 1.1.40
+  '@shockpkg/icon-encoder':
+    specifier: ^2.1.3
+    version: 2.1.3
   '@sveltejs/vite-plugin-svelte':
     specifier: ^2.4.2
     version: 2.4.2(svelte@4.0.5)(vite@4.4.4)
@@ -553,6 +556,11 @@ packages:
     dev: true
     optional: true
 
+  /@fiahfy/packbits@0.0.6:
+    resolution: {integrity: sha512-XuhF/edg+iIvXjkCWgfj6fWtRi/KrEPg2ILXj1l86EN4EssuOiPcLKgkMDr9cL8jTGtVd/MKUWW6Y0/ZVf1PGA==}
+    engines: {node: '>=8'}
+    dev: true
+
   /@floating-ui/core@1.3.1:
     resolution: {integrity: sha512-Bu+AMaXNjrpjh41znzHqaz3r2Nr8hHuHZT6V2LBKMhyMl0FgKA62PNYbqnfgmzOhoWZj70Zecisbo4H1rotP5g==}
     dev: false
@@ -671,6 +679,15 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+    dev: true
+
+  /@shockpkg/icon-encoder@2.1.3:
+    resolution: {integrity: sha512-JFyoQerf51EB6+UyqnyxE2yhKGw/WIo1W6wZE/S7+OBMno+r7zFP+OPZgUewSCZMwHFHhXZ9fX8OyNGomp2fZg==}
+    engines: {node: '>=14.15.0'}
+    hasBin: true
+    dependencies:
+      '@fiahfy/packbits': 0.0.6
+      upng-js: 2.1.0
     dev: true
 
   /@sveltejs/vite-plugin-svelte-inspector@1.0.3(@sveltejs/vite-plugin-svelte@2.4.2)(svelte@4.0.5)(vite@4.4.4):
@@ -1648,6 +1665,10 @@ packages:
       p-limit: 3.1.0
     dev: true
 
+  /pako@1.0.11:
+    resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
+    dev: true
+
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -2397,6 +2418,12 @@ packages:
       picocolors: 1.0.0
     dev: true
 
+  /upng-js@2.1.0:
+    resolution: {integrity: sha512-d3xzZzpMP64YkjP5pr8gNyvBt7dLk/uGI67EctzDuVp4lCZyVMo0aJO6l/VDlgbInJYDY6cnClLoBp29eKWI6g==}
+    dependencies:
+      pako: 1.0.11
+    dev: true
+
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
@@ -2483,8 +2510,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/tauri-apps/tauri-plugin-store/8a37f08e6c0b7781fc1f0e458f2d0ff18368ac75:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/8a37f08e6c0b7781fc1f0e458f2d0ff18368ac75}
+  github.com/tauri-apps/tauri-plugin-store/e08b8fdf6adb27a437b71ede4f7e572e7d11cc2d:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/e08b8fdf6adb27a437b71ede4f7e572e7d11cc2d}
     name: tauri-plugin-store-api
     version: 0.0.0
     dependencies:

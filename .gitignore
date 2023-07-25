@@ -26,7 +26,9 @@ dist-ssr
 src-tauri/icons/32x32.png
 src-tauri/icons/128x128.png
 src-tauri/icons/128x128@2x.png
+src-tauri/icons/icon.icns
 src-tauri/icons/icon.ico
+src-tauri/icons/icon.png
 src-tauri/icons/Square30x30Logo.png
 src-tauri/icons/Square44x44Logo.png
 src-tauri/icons/Square71x71Logo.png
@@ -37,3 +39,4 @@ src-tauri/icons/Square150x150Logo.png
 src-tauri/icons/Square284x284Logo.png
 src-tauri/icons/Square310x310Logo.png
 src-tauri/icons/StoreLogo.png
+src-tauri/icons/tray-template.png
