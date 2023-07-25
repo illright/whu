@@ -6,7 +6,7 @@ use std::future::Future;
 
 use crate::settings::SHORT_BREAK_PERIOD;
 use futures_lite::future::race;
-use tauri::{ActivationPolicy, SystemTrayEvent};
+use tauri::SystemTrayEvent;
 use tauri_plugin_store;
 use tokio::{
     sync::{mpsc, watch},
@@ -81,7 +81,7 @@ fn main() {
     let (last_break_tx, last_break_rx) = watch::channel::<Instant>(Instant::now());
     let (force_break_tx, mut force_break_rx) = mpsc::unbounded_channel::<Instant>();
 
-    let mut app = tauri::Builder::default()
+    let app = tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             let app_handle = app.handle();
@@ -160,9 +160,6 @@ fn main() {
         .build(tauri::generate_context!())
         .expect("error while building Tauri application");
 
-    #[cfg(target_os = "macos")]
-    app.set_activation_policy(ActivationPolicy::Accessory);
-
     app.run(|_app_handle, event| {
         if let tauri::RunEvent::ExitRequested { api, .. } = event {
             api.prevent_exit();
@@ -216,8 +213,6 @@ fn create_break_window<'a>(
     )
     .title("WHU")
     .fullscreen(true)
-    .always_on_top(true)
-    .closable(false)
 }
 
 async fn map<SourceValue, ResultValue, Mapper>(
