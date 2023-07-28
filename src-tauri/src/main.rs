@@ -14,12 +14,17 @@ use tokio::{
 };
 use urlencoding::Encoded;
 
+rust_i18n::i18n!("locales");
+
+mod plural_rules;
 mod settings;
 
 mod system_tray {
     use std::time::Duration;
 
+    use crate::plural_rules;
     use crate::settings::{self, SHORT_BREAK_PERIOD};
+    use rust_i18n::t;
     use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem};
     use tokio::time::Instant;
 
@@ -29,12 +34,17 @@ mod system_tray {
     pub const QUIT: &str = "quit";
 
     pub fn make_tray() -> SystemTray {
-        let skip_to_next_break =
-            CustomMenuItem::new(SKIP_TO_NEXT_SHORT_BREAK.to_string(), "Skip to next break");
-        let quit = CustomMenuItem::new(QUIT.to_string(), "Quit");
-        let time_until_break =
-            CustomMenuItem::new(TIME_UNTIL_SHORT_BREAK.to_string(), "Time until break").disabled();
-        let settings = CustomMenuItem::new(SETTINGS.to_string(), "Settings");
+        let skip_to_next_break = CustomMenuItem::new(
+            SKIP_TO_NEXT_SHORT_BREAK.to_string(),
+            t!("tray.skip_to_next_break"),
+        );
+        let quit = CustomMenuItem::new(QUIT.to_string(), t!("tray.quit"));
+        let time_until_break = CustomMenuItem::new(
+            TIME_UNTIL_SHORT_BREAK.to_string(),
+            t!("tray.time_until_break"),
+        )
+        .disabled();
+        let settings = CustomMenuItem::new(SETTINGS.to_string(), t!("tray.settings"));
         let tray_menu = SystemTrayMenu::new()
             .add_item(time_until_break)
             .add_native_item(SystemTrayMenuItem::Separator)
@@ -55,7 +65,9 @@ mod system_tray {
             let time_to_next_break = next_break_instant - Instant::now();
             item_handle
                 .set_title(format!(
-                    "Next short break in {}",
+                    "{} {} {}",
+                    t!("tray.next_break"),
+                    t!("tray.in_about"),
                     approximate_duration(time_to_next_break)
                 ))
                 .expect("cannot set remaining time until next break in tray");
@@ -66,10 +78,19 @@ mod system_tray {
         let seconds = duration.as_secs();
 
         if seconds < 60 {
-            String::from("about a minute")
+            String::from(t!("durations.a_minute"))
         } else {
-            let full_minutes = seconds / 60;
-            format!("about {} minutes", full_minutes + 1)
+            let ceil_minutes =
+                i32::try_from(seconds / 60 + 1).expect("minutes will always fit in an i32");
+            format!(
+                "{} {}",
+                ceil_minutes,
+                t!(format!(
+                    "durations.minutes.{}",
+                    plural_rules::select("ru", ceil_minutes)
+                )
+                .as_str())
+            )
         }
     }
 }
@@ -80,6 +101,7 @@ const BREAK_DESCRIPTION: &str = "Take 5 minutes to breathe deeply and focus on e
 fn main() {
     let (last_break_tx, last_break_rx) = watch::channel::<Instant>(Instant::now());
     let (force_break_tx, mut force_break_rx) = mpsc::unbounded_channel::<Instant>();
+    rust_i18n::set_locale("ru");
 
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::default().build())

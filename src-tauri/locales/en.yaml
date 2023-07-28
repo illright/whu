@@ -1,0 +1,16 @@
+tray:
+  next_break: Next break
+  in_about: in about
+
+  skip_to_next_break: Skip to the next break
+  # ↓ Placeholder, shouldn't normally appear
+  time_until_break: Time until break
+  settings: Settings
+  quit: Quit
+
+durations:
+  # Example: next break in about {a_minute}
+  a_minute: a minute
+  minutes:
+    one: minute
+    other: minutes

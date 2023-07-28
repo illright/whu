@@ -1,0 +1,17 @@
+tray:
+  next_break: Следующий перерыв
+  in_about: примерно через
+  skip_to_next_break: Запустить следующий перерыв сейчас
+  time_until_break: Время до перерыва
+  settings: Настройки
+  quit: Закрыть
+
+durations:
+  # Example: next break in about {a_minute}
+  a_minute: минуту
+  # Example: next break in about {# minutes}
+  minutes:
+    one: минуту
+    few: минуты
+    many: минут
+    other: минут
