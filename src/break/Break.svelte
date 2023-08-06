@@ -5,6 +5,7 @@
   import { closeWindow } from "../backend";
   import HintTypePicker from "./HintTypePicker.svelte";
   import { _, isLoading } from "svelte-i18n";
+  import ProgressBar from "./ProgressBar.svelte";
 
   const parameters = new URLSearchParams(location.search);
 
@@ -16,10 +17,14 @@
 </script>
 
 {#if !$isLoading}
-  <main class="font-mono">
-    <h1 class="mb-7 font-sans text-xl font-semibold">
-      {parameters.get("title")}
-    </h1>
+  <main
+    class="relative h-full flex flex-col justify-center items-center font-mono"
+  >
+    {#if parameters.has("title")}
+      <h1 class="mb-7 font-sans text-xl font-semibold">
+        {parameters.get("title")}
+      </h1>
+    {/if}
     <p class="mb-14 max-w-[60%] text-center text-lg">
       {parameters.get("description")}
     </p>
@@ -34,16 +39,10 @@
           >{$_("break.skip")} — <kbd class="font-medium">Cmd+X</kbd></button
         >
       </div>
-      <div
-        class="progress absolute bottom-0 left-0 h-1.5 w-full"
-        role="progressbar"
-        aria-labelledby="remaining-time"
-        aria-valuenow={$timer / durationMs}
-        aria-valuemin={0}
-        aria-valuemax={1}
-      >
-        <div class="track" style:width="{($timer / durationMs) * 100}%" />
-      </div>
+      <ProgressBar
+        ariaLabelledby="remaining-time"
+        value={$timer / durationMs}
+      />
     </footer>
   </main>
 {/if}
@@ -63,12 +62,6 @@
     --gray-300: #605e5e;
     --background: #fff;
 
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
     background-color: var(--background);
     color: var(--text);
 
@@ -88,12 +81,5 @@
 
   footer button:hover {
     background-color: rgba(var(--text-components), 1%);
-  }
-
-  .progress .track {
-    height: 100%;
-    background-color: var(--primary);
-    box-shadow: 0px 4px 11px 5px rgba(var(--primary-components), 0.6);
-    border-top-right-radius: 2px;
   }
 </style>
