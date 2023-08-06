@@ -1,8 +1,10 @@
+import { resolve } from "path";
+
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import sveltePreprocess from "svelte-preprocess";
 import Icons from "unplugin-icons/vite";
-import { resolve } from "path";
+import ViteYaml from "@modyfi/vite-plugin-yaml";
 
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
@@ -17,6 +19,7 @@ export default defineConfig(() => ({
     Icons({
       compiler: "svelte",
     }),
+    ViteYaml(),
   ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -40,7 +43,7 @@ export default defineConfig(() => ({
     // Tauri supports es2021
     target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
     // don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
+    minify: !process.env.TAURI_DEBUG ? ("esbuild" as const) : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },

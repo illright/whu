@@ -11,6 +11,74 @@ tray:
 durations:
   # Example: next break in about {a_minute}
   a_minute: a minute
+  # Example: next break in about {# minutes}
   minutes:
     one: minute
+    few: null
     other: minutes
+    many: null
+
+settings:
+  title: Settings
+
+  tabs:
+    language-appearance: Language & appearance
+    short-breaks: Short breaks
+    long-breaks: Long breaks
+    whu-in-your-system: WHU in your system
+
+  language-appearance:
+    language: Language
+    accent-color: Accent color
+    light-preference: Light preference
+
+  light-preference:
+    light: Light
+    dark: Dark
+    auto: Auto
+
+  colors:
+    green: Green
+
+  breaks:
+    short-breaks-enabled:
+      label: Short breaks enabled
+      description: Appear briefly and often, help against eye strain.
+    period: Time between breaks
+    appearance: How it appears
+    notification: Notify before break
+    postponable:
+      label: Postponing allowed
+      description: If you need to finish something quickly but then still take a break afterwards.
+    early-finishable:
+      label: Early finishing allowed
+      description: If you want to decide when the break is over. Disabling this is recommended for discipline.
+    passphrase:
+      label: Passphrase to force-remove a break
+      description: Type this on the keyboard when the break is shown to make it go away.
+    show-test-break: Show a test break
+
+  break-appearance:
+    notification: Notification
+    full-screen: Full-screen popup
+
+  whu-in-your-system:
+    launch-on-startup:
+      label: Launch on startup
+      description: When you turn on your device, WHU will start automatically
+    auto-update:
+      label: Update automatically
+      description: Updates will be installed transparently with no actions required
+    break-location: Where to show breaks
+    monitor-inactivity:
+      label: Monitor inactivity
+      description: If you’re away from your device, that is considered a natural break, so you don’t get interrupted right after you come back.
+    ignore-dnd: Show breaks in Do Not Disturb mode
+
+  break-location:
+    active-display: Active display
+    all-displays: All displays
+
+break:
+  remaining: remaining
+  skip: Skip

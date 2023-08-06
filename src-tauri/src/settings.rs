@@ -24,7 +24,14 @@ pub fn create_window<'a>(app_handle: &'a tauri::AppHandle) -> tauri::WindowBuild
     tauri::WindowBuilder::new(
         app_handle,
         "settings",
-        tauri::WindowUrl::App(format!("settings.html?path={}", Encoded(SETTINGS_PATH)).into()),
+        tauri::WindowUrl::App(
+            format!(
+                "settings.html?lang={}&path={}",
+                "ru",
+                Encoded(SETTINGS_PATH)
+            )
+            .into(),
+        ),
     )
     .title("Settings — WHU")
 }

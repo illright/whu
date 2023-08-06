@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Tabs } from "radix-svelte";
+  import { _, isLoading } from "svelte-i18n";
   import TabTrigger from "./TabTrigger.svelte";
   import { readSettingsStore } from "./settings-store";
   import IconBxsPalette from "~icons/bx/bxs-palette";
@@ -26,134 +27,183 @@
   const settingsFilePath = parameters.get("path") ?? "settings.json";
 </script>
 
-<Tabs.Root
-  value="language-appearance"
-  class="flex h-full w-full py-4 font-mono"
-  orientation="vertical"
->
-  <Tabs.List
-    class="flex flex-col gap-2 border-r border-r-slate-200 px-6 py-4 font-medium"
-  >
-    <TabTrigger value="language-appearance">
-      <IconBxsPalette class="h-5 w-5" />
-      Language & appearance
-    </TabTrigger>
-    <TabTrigger value="short-breaks"
-      ><IconBxsTimer class="h-5 w-5" />Short breaks</TabTrigger
-    >
-    <TabTrigger value="long-breaks"
-      ><IconBxsAlarm class="h-5 w-5" />Long breaks</TabTrigger
-    >
-    <TabTrigger value="whu-in-your-system"
-      ><IconBxsWindowAlt class="h-5 w-5" />WHU in your system</TabTrigger
-    >
-  </Tabs.List>
-  <Tabs.Content
-    class="flex-1 flex flex-col gap-6 px-6 py-4"
+<svelte:head>
+  {#if !$isLoading}
+    <title>{$_("settings.title")} — WHU</title>
+  {/if}
+</svelte:head>
+
+{#if !$isLoading}
+  <Tabs.Root
     value="language-appearance"
+    class="flex h-full w-full py-4 font-mono"
+    orientation="vertical"
   >
-    <Select
-      label="Language"
-      name="language"
-      options={[
-        { value: "en", label: "English", icon: IconCircleFlagsGb },
-        { value: "ru", label: "Русский / Russian", icon: IconCircleFlagsRu },
-      ]}
-    />
-    <Select
-      label="Accent color"
-      name="accent-color"
-      options={[{ value: "green", label: "Green", icon: Green }]}
-    />
-    <ToggleGroup
-      label="Light preference"
-      name="light-preference"
-      options={[
-        { value: "auto", label: "Auto", icon: IconBxCog },
-        { value: "light", label: "Light", icon: IconBxSun },
-        { value: "dark", label: "Dark", icon: IconBxMoon },
-      ]}
-    />
-  </Tabs.Content>
-  <Tabs.Content
-    class="flex-1 flex flex-col gap-6 px-6 py-4"
-    value="short-breaks"
-  >
-    <Switch
-      rootName="short-breaks-enabled"
-      label="Short breaks enabled"
-      description="Appear quick and often, help against eye strain."
-    />
-    <Slider name="short-break-period" label="Time between breaks" message="20 minutes" />
-    <RadioGroup
-      label="How it appears"
-      name="short-break-appearance"
-      options={[
-        {
-          value: "notification",
-          label: "Notification",
-        },
-        {
-          value: "full-screen",
-          label: "Full-screen popup",
-        },
-      ]}
-    />
-    <Slider name="short-break-notification" label="Notify before break" message="20 minutes" />
-    <Switch
-      rootName="short-breaks-postponable"
-      label="Postponing allowed"
-      description="If you need to finish something quickly but then still take a break afterwards."
-    />
-    <Switch
-      rootName="short-breaks-early-finishable"
-      label="Early finishing allowed"
-      description="If you want to decide when the break is over. Disabling this is recommended for discipline."
-    />
-    <Input
-      name="short-breaks-passphrase"
-      label="Passphrase to force-remove a break"
-      description="Type this on the keyboard when the break is shown to make it go away."
-    />
-    <div class="flex-1" />
-    <div class="px-6 pt-4 -mx-6 -mb-4 border-t border-t-slate-200 flex flex-col">
-      <Button>Show a test break</Button>
-    </div>
-  </Tabs.Content>
-  <Tabs.Content
-    class="flex-1 flex flex-col gap-6 px-6 py-4"
-    value="whu-in-your-system"
-  >
-    <Switch
-      rootName="launch-on-startup"
-      label="Launch on startup"
-      description="When you turn on your device, WHU will start automatically"
-    />
-    <Switch
-      rootName="update-automatically"
-      label="Update automatically"
-      description="Updates will be installed transparently with no actions required"
-    />
-    <ToggleGroup
-      label="Where to show breaks"
-      name="break-location"
-      options={[
-        {
-          value: "active-monitor",
-          label: "Active monitor",
-          icon: IconBxWindow,
-        },
-        { value: "all-monitors", label: "All monitors", icon: IconBxWindows },
-      ]}
-    />
-    <Switch
-      rootName="monitor-inactivity"
-      label="Monitor inactivity"
-      description="If you’re away from your device, that is considered a natural break, so you don’t get interrupted right after you come back."
-    />
-    <Switch rootName="ignore-dnd" label="Show breaks in Do Not Disturb mode" />
-  </Tabs.Content>
-</Tabs.Root>
+    <Tabs.List
+      class="flex flex-col gap-2 border-r border-r-slate-200 px-6 py-4 font-medium"
+    >
+      <TabTrigger value="language-appearance">
+        <IconBxsPalette class="h-5 w-5" />
+        {$_("settings.tabs.language-appearance")}
+      </TabTrigger>
+      <TabTrigger value="short-breaks"
+        ><IconBxsTimer class="h-5 w-5" />{$_(
+          "settings.tabs.short-breaks",
+        )}</TabTrigger
+      >
+      <TabTrigger value="long-breaks"
+        ><IconBxsAlarm class="h-5 w-5" />{$_(
+          "settings.tabs.long-breaks",
+        )}</TabTrigger
+      >
+      <TabTrigger value="whu-in-your-system"
+        ><IconBxsWindowAlt class="h-5 w-5" />{$_(
+          "settings.tabs.whu-in-your-system",
+        )}</TabTrigger
+      >
+    </Tabs.List>
+    <Tabs.Content
+      class="flex-1 flex flex-col gap-6 px-6 py-4"
+      value="language-appearance"
+    >
+      <Select
+        label={$_("settings.language-appearance.language")}
+        name="language"
+        options={[
+          { value: "en", label: "English", icon: IconCircleFlagsGb },
+          { value: "ru", label: "Русский / Russian", icon: IconCircleFlagsRu },
+        ]}
+      />
+      <Select
+        label={$_("settings.language-appearance.accent-color")}
+        name="accent-color"
+        options={[
+          { value: "green", label: $_("settings.colors.green"), icon: Green },
+        ]}
+      />
+      <ToggleGroup
+        label={$_("settings.language-appearance.light-preference")}
+        name="light-preference"
+        options={[
+          {
+            value: "auto",
+            label: $_("settings.light-preference.auto"),
+            icon: IconBxCog,
+          },
+          {
+            value: "light",
+            label: $_("settings.light-preference.light"),
+            icon: IconBxSun,
+          },
+          {
+            value: "dark",
+            label: $_("settings.light-preference.dark"),
+            icon: IconBxMoon,
+          },
+        ]}
+      />
+    </Tabs.Content>
+    <Tabs.Content
+      class="flex-1 flex flex-col gap-6 px-6 py-4"
+      value="short-breaks"
+    >
+      <Switch
+        rootName="short-breaks-enabled"
+        label={$_("settings.breaks.short-breaks-enabled.label")}
+        description={$_("settings.breaks.short-breaks-enabled.description")}
+      />
+      <Slider
+        name="short-break-period"
+        label={$_("settings.breaks.period")}
+        message="20 minutes"
+      />
+      <RadioGroup
+        label={$_("settings.breaks.appearance")}
+        name="short-break-appearance"
+        options={[
+          {
+            value: "notification",
+            label: $_("settings.break-appearance.notification"),
+          },
+          {
+            value: "full-screen",
+            label: $_("settings.break-appearance.full-screen"),
+          },
+        ]}
+      />
+      <Slider
+        name="short-break-notification"
+        label={$_("settings.breaks.notification")}
+        message="20 minutes"
+      />
+      <Switch
+        rootName="short-breaks-postponable"
+        label={$_("settings.breaks.postponable.label")}
+        description={$_("settings.breaks.postponable.description")}
+      />
+      <Switch
+        rootName="short-breaks-early-finishable"
+        label={$_("settings.breaks.early-finishable.label")}
+        description={$_("settings.breaks.early-finishable.description")}
+      />
+      <Input
+        name="short-breaks-passphrase"
+        label={$_("settings.breaks.passphrase.label")}
+        description={$_("settings.breaks.passphrase.description")}
+      />
+      <div class="flex-1" />
+      <div
+        class="px-6 pt-4 -mx-6 -mb-4 border-t border-t-slate-200 flex flex-col"
+      >
+        <Button>{$_("settings.breaks.show-test-break")}</Button>
+      </div>
+    </Tabs.Content>
+    <Tabs.Content
+      class="flex-1 flex flex-col gap-6 px-6 py-4"
+      value="whu-in-your-system"
+    >
+      <Switch
+        rootName="launch-on-startup"
+        label={$_("settings.whu-in-your-system.launch-on-startup.label")}
+        description={$_(
+          "settings.whu-in-your-system.launch-on-startup.description",
+        )}
+      />
+      <Switch
+        rootName="auto-update"
+        label={$_("settings.whu-in-your-system.auto-update.label")}
+        description={$_("settings.whu-in-your-system.auto-update.description")}
+      />
+      <ToggleGroup
+        label={$_("settings.whu-in-your-system.break-location")}
+        name="break-location"
+        options={[
+          {
+            value: "active-display",
+            label: $_("settings.break-location.active-display"),
+            icon: IconBxWindow,
+          },
+          {
+            value: "all-displays",
+            label: $_("settings.break-location.all-displays"),
+            icon: IconBxWindows,
+          },
+        ]}
+      />
+      <Switch
+        rootName="monitor-inactivity"
+        label={$_("settings.whu-in-your-system.monitor-inactivity.label")}
+        description={$_(
+          "settings.whu-in-your-system.monitor-inactivity.description",
+        )}
+      />
+      <Switch
+        rootName="ignore-dnd"
+        label={$_("settings.whu-in-your-system.ignore-dnd")}
+      />
+    </Tabs.Content>
+  </Tabs.Root>
+{/if}
 
 <!-- {#await readSettingsStore(settingsFilePath) then { values, save }}
   <form on:submit|preventDefault={save}>

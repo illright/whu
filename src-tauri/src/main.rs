@@ -213,11 +213,12 @@ struct BreakConfiguration<'a> {
 impl<'a> BreakConfiguration<'a> {
     fn to_query(&self) -> String {
         format!(
-            "duration={}&break_type={}&title={}&description={}",
+            "duration={}&break_type={}&title={}&description={}&lang={}",
             self.duration,
             Encoded(self.break_type.to_string()),
             Encoded(self.title),
-            Encoded(self.description)
+            Encoded(self.description),
+            "ru"
         )
     }
 }

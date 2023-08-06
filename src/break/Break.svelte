@@ -4,6 +4,7 @@
   import { createTimer, formatTime } from "./timer";
   import { closeWindow } from "../backend";
   import HintTypePicker from "./HintTypePicker.svelte";
+  import { _, isLoading } from "svelte-i18n";
 
   const parameters = new URLSearchParams(location.search);
 
@@ -14,36 +15,38 @@
   timer.completed.then(closeWindow);
 </script>
 
-<main class="font-mono">
-  <h1 class="mb-7 font-sans text-xl font-semibold">
-    {parameters.get("title")}
-  </h1>
-  <p class="mb-14 max-w-[60%] text-center text-lg">
-    {parameters.get("description")}
-  </p>
-  <HintTypePicker />
-  <footer class="absolute bottom-0 left-0 w-full">
-    <div class="flex justify-between">
-      <span id="remaining-time" class="px-16 py-12"
-        >{formatTime(Math.ceil($timer / 1000))} remaining</span
-      >
+{#if !$isLoading}
+  <main class="font-mono">
+    <h1 class="mb-7 font-sans text-xl font-semibold">
+      {parameters.get("title")}
+    </h1>
+    <p class="mb-14 max-w-[60%] text-center text-lg">
+      {parameters.get("description")}
+    </p>
+    <HintTypePicker />
+    <footer class="absolute bottom-0 left-0 w-full">
+      <div class="flex justify-between">
+        <span id="remaining-time" class="px-16 py-12"
+          >{formatTime(Math.ceil($timer / 1000))} {$_("break.remaining")}</span
+        >
 
-      <button class="px-16 py-12" on:click={closeWindow}
-        >Skip — <kbd class="font-medium">Cmd+X</kbd></button
+        <button class="px-16 py-12" on:click={closeWindow}
+          >{$_("break.skip")} — <kbd class="font-medium">Cmd+X</kbd></button
+        >
+      </div>
+      <div
+        class="progress absolute bottom-0 left-0 h-1.5 w-full"
+        role="progressbar"
+        aria-labelledby="remaining-time"
+        aria-valuenow={$timer / durationMs}
+        aria-valuemin={0}
+        aria-valuemax={1}
       >
-    </div>
-    <div
-      class="progress absolute bottom-0 left-0 h-1.5 w-full"
-      role="progressbar"
-      aria-labelledby="remaining-time"
-      aria-valuenow={$timer / durationMs}
-      aria-valuemin={0}
-      aria-valuemax={1}
-    >
-      <div class="track" style:width="{($timer / durationMs) * 100}%" />
-    </div>
-  </footer>
-</main>
+        <div class="track" style:width="{($timer / durationMs) * 100}%" />
+      </div>
+    </footer>
+  </main>
+{/if}
 
 <style>
   :global(html, body, #app) {

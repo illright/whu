@@ -15,3 +15,68 @@ durations:
     few: минуты
     many: минут
     other: минут
+
+settings:
+  title: Настройки
+
+  tabs:
+    language-appearance: Язык и внешний вид
+    short-breaks: Мини-перерывы
+    long-breaks: Длинные перерывы
+    whu-in-your-system: WHU в вашей системе
+
+  language-appearance:
+    language: Язык
+    accent-color: Цвет темы
+    light-preference: Световое предпочтение
+
+  light-preference:
+    light: Светло
+    dark: Темно
+    auto: Авто
+
+  colors:
+    green: Зелёный
+
+  breaks:
+    short-breaks-enabled:
+      label: Мини-перерывы включены
+      description: Появляются часто и ненадолго, помогают снизить нагрузку на глаза.
+    period: Промежуток между перерывами
+    appearance: Как показывать перерыв
+    notification: Присылать уведомление перед перерывом
+    postponable:
+      label: Можно откладывать
+      description: Когда вам нужно что-то закончить, но потом вы всё равно хотите сделать перерыв.
+    early-finishable:
+      label: Можно заканчивать перерыв раньше
+      description: Когда вы хотите сами решать, когда перерыв закончен. Рекомендуется не разрешать это для дисциплины.
+    passphrase:
+      label: Кодовое слово, чтоб сразу убрать перерыв
+      description: Напишите это на клавиатуре во время перерыва, и он мгновенно исчезнет.
+    show-test-break: Показать тестовый перерыв
+
+  break-appearance:
+    notification: Уведомление
+    full-screen: На весь экран
+
+  whu-in-your-system:
+    launch-on-startup:
+      label: Запускать при включении
+      description: Когда вы включите ваше устройство, WHU автоматически запустится.
+    auto-update:
+      label: Обновлять автоматически
+      description: Обновления будут устанавливаться незаметно, никаких действий не потребуется.
+    break-location: Где показывать перерывы
+    monitor-inactivity:
+      label: Следить за неактивностью
+      description: Если вы отойдёте, это зачтётся за естественный перерыв, и WHU не прервёт вас сразу после возвращения.
+    ignore-dnd: Показывать перерывы в режиме Не беспокоить
+
+  break-location:
+    active-display: Активный экран
+    all-displays: Все экраны
+
+break:
+  remaining: осталось
+  skip: Пропустить
