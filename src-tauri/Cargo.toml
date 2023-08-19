@@ -21,6 +21,8 @@ futures-lite = "1.13.0"
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 urlencoding = "2.1.2"
 rust-i18n = "2.1.0"
+serde_yaml = "0.9.25"
+rand = "0.8.5"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

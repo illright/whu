@@ -2,11 +2,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use core::fmt;
-use std::future::Future;
+use std::{fs::File, future::Future};
 
 use crate::settings::SHORT_BREAK_PERIOD;
 use futures_lite::future::race;
-use tauri::SystemTrayEvent;
+use rand::seq::SliceRandom;
+use serde_yaml::Value;
+use tauri::{AppHandle, SystemTrayEvent};
 use tauri_plugin_store;
 use tokio::{
     sync::{mpsc, watch},
@@ -95,9 +97,6 @@ mod system_tray {
     }
 }
 
-const BREAK_TITLE: &str = "Trust me, it works";
-const BREAK_DESCRIPTION: &str = "Take 5 minutes to breathe deeply and focus on exhaling. It is known to induce a sense of calmness and help you relieve stress.";
-
 fn main() {
     let (last_break_tx, last_break_rx) = watch::channel::<Instant>(Instant::now());
     let (force_break_tx, mut force_break_rx) = mpsc::unbounded_channel::<Instant>();
@@ -131,11 +130,15 @@ fn main() {
                         }
                     }
 
+                    let (title, description) =
+                        generate_break_idea(rust_i18n::locale(), &app_handle)
+                            .expect("why would generating a break idea ever fail, right?");
+
                     let configuration = BreakConfiguration {
                         duration: 20,
                         break_type: BreakType::Short,
-                        title: BREAK_TITLE,
-                        description: BREAK_DESCRIPTION,
+                        title,
+                        description,
                     };
                     create_break_window(&app_handle, &configuration)
                         .build()
@@ -203,22 +206,22 @@ impl fmt::Display for BreakType {
     }
 }
 
-struct BreakConfiguration<'a> {
+struct BreakConfiguration {
     duration: u32,
     break_type: BreakType,
-    title: &'a str,
-    description: &'a str,
+    title: String,
+    description: String,
 }
 
-impl<'a> BreakConfiguration<'a> {
+impl BreakConfiguration {
     fn to_query(&self) -> String {
         format!(
             "duration={}&break_type={}&title={}&description={}&lang={}",
             self.duration,
             Encoded(self.break_type.to_string()),
-            Encoded(self.title),
-            Encoded(self.description),
-            "ru"
+            Encoded(self.title.clone()),
+            Encoded(self.description.clone()),
+            rust_i18n::locale(),
         )
     }
 }
@@ -236,6 +239,24 @@ fn create_break_window<'a>(
     )
     .title("WHU")
     .fullscreen(true)
+}
+
+fn generate_break_idea(lang: String, app: &AppHandle) -> Option<(String, String)> {
+    let resource_path = app
+        .path_resolver()
+        .resolve_resource(format!("locales/{}.yaml", lang))?;
+    let file = File::open(&resource_path).ok()?;
+    let en: Value = serde_yaml::from_reader(file).ok()?;
+    let break_ideas = en.as_mapping()?.get("break-ideas")?.as_mapping()?;
+    let long_break_ideas = Vec::from_iter(break_ideas.get("long")?.as_mapping()?.values());
+
+    let random_long_break_idea =
+        (long_break_ideas.choose(&mut rand::thread_rng())?).as_mapping()?;
+
+    Some((
+        random_long_break_idea.get("title")?.as_str()?.to_string(),
+        random_long_break_idea.get("text")?.as_str()?.to_string(),
+    ))
 }
 
 async fn map<SourceValue, ResultValue, Mapper>(
