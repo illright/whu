@@ -78,7 +78,12 @@ settings:
     all-displays: Все экраны
 
 break:
-  remaining: осталось
+  # Example: 5 minutes {remaining}
+  remaining:
+    one: осталась
+    few: осталось
+    many: осталось
+    other: осталось
   skip: Пропустить
 
 break-ideas:

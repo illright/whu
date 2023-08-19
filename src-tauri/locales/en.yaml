@@ -15,8 +15,8 @@ durations:
   minutes:
     one: minute
     few: null
-    other: minutes
     many: null
+    other: minutes
 
 settings:
   title: Settings
@@ -80,7 +80,13 @@ settings:
     all-displays: All displays
 
 break:
-  remaining: remaining
+  # Example: 5 minutes {remaining}
+  remaining:
+    one: remaining
+    few: null
+    many: null
+    other: remaining
+
   skip: Skip
 
 break-ideas:

@@ -30,23 +30,34 @@ const listFormatter = new Intl.ListFormat("en", {
   type: "conjunction",
 });
 
-export function formatTime(timeSeconds: number) {
+export function formatTimeRemaining(timeSeconds: number) {
+  const lang = get(locale) ?? "en";
+  const $_ = get(_);
+  const pluralRules = new Intl.PluralRules(lang);
   const duration = {
-    hours: Math.floor(timeSeconds / 3600),
     minutes: Math.floor(timeSeconds / 60),
     seconds: Math.floor(timeSeconds % 60),
   };
 
-  return listFormatter.format(
+  if (duration.minutes >= 60) {
+    console.error("Not designed to handle durations longer than 1 hour");
+  }
+
+  const formatted = listFormatter.format(
     formatDuration(duration, {
       format: [
-        duration.hours !== 0 && "hours",
-        duration.hours < 2 && duration.minutes !== 0 && "minutes",
-        duration.hours === 0 && duration.minutes < 2 && "seconds",
+        duration.minutes !== 0 && "minutes",
+        duration.minutes < 2 && "seconds",
       ].filter(Boolean),
       zero: true,
       delimiter: "#",
-      locale: locales[(get(locale) ?? "en") as keyof typeof locales],
+      locale: locales[lang as keyof typeof locales],
     }).split("#"),
   );
+
+  return `${formatted} ${$_(
+    `break.remaining.${pluralRules.select(
+      duration.minutes || duration.seconds,
+    )}`,
+  )}`;
 }

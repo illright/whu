@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { createTimer, formatTime } from "./timer";
+  import { createTimer, formatTimeRemaining } from "./timer";
   import { closeWindow } from "../backend";
   import HintTypePicker from "./HintTypePicker.svelte";
   import { _, isLoading } from "svelte-i18n";
@@ -32,7 +32,7 @@
     <footer class="absolute bottom-0 left-0 w-full">
       <div class="flex justify-between">
         <span id="remaining-time" class="px-16 py-12"
-          >{formatTime(Math.ceil($timer / 1000))} {$_("break.remaining")}</span
+          >{formatTimeRemaining(Math.ceil($timer / 1000))}</span
         >
 
         <button class="px-16 py-12" on:click={closeWindow}
