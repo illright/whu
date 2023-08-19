@@ -23,6 +23,7 @@ urlencoding = "2.1.2"
 rust-i18n = "2.1.0"
 serde_yaml = "0.9.25"
 rand = "0.8.5"
+phf = { version = "0.11.2", features = ["macros"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

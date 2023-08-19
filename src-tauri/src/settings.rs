@@ -1,12 +1,19 @@
 use std::path::PathBuf;
 
+use phf::phf_map;
 use tauri::{AppHandle, Manager};
 use urlencoding::Encoded;
 
 const SETTINGS_PATH: &str = "settings.json";
 pub const SHORT_BREAK_PERIOD: &str = "short_break_period";
 
-pub fn get_u64(app_handle: &AppHandle, key: &str, default: u64) -> u64 {
+static DEFAULTS_U64: phf::Map<&'static str, u64> = phf_map! {
+    "short_break_period" => 5 * 60,
+};
+
+pub fn get_u64(app_handle: &AppHandle, key: &str) -> u64 {
+    let default = *DEFAULTS_U64.get(key).unwrap_or(&0);
+
     tauri_plugin_store::with_store(
         app_handle.clone(),
         app_handle.state(),

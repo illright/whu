@@ -59,7 +59,7 @@ mod system_tray {
     pub fn calculate_time_until_break(app_handle: &tauri::AppHandle, last_break_instant: Instant) {
         let item_handle = app_handle.tray_handle().get_item(TIME_UNTIL_SHORT_BREAK);
 
-        let short_break_period = settings::get_u64(app_handle, SHORT_BREAK_PERIOD, 5 * 60);
+        let short_break_period = settings::get_u64(app_handle, SHORT_BREAK_PERIOD);
         let next_break_instant =
             last_break_instant.checked_add(Duration::from_secs(short_break_period));
 
@@ -108,7 +108,7 @@ fn main() {
             let app_handle = app.handle();
 
             tauri::async_runtime::spawn(async move {
-                let short_break_period = settings::get_u64(&app_handle, SHORT_BREAK_PERIOD, 5 * 60);
+                let short_break_period = settings::get_u64(&app_handle, SHORT_BREAK_PERIOD);
                 let mut interval = interval(Duration::from_secs(short_break_period));
                 interval.set_missed_tick_behavior(MissedTickBehavior::Skip);
                 interval.tick().await;
