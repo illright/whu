@@ -173,7 +173,7 @@ fn main() {
                         app_handle.exit(0);
                     }
                     SETTINGS => {
-                        settings::create_window(app_handle)
+                        settings::create_window(app_handle, rust_i18n::locale())
                             .build()
                             .expect("cannot build settings window");
                     }

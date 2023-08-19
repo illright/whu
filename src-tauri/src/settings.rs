@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use phf::phf_map;
+use rust_i18n::t;
 use tauri::{AppHandle, Manager};
 use urlencoding::Encoded;
 
@@ -27,18 +28,21 @@ pub fn get_u64(app_handle: &AppHandle, key: &str) -> u64 {
     .unwrap_or(default)
 }
 
-pub fn create_window<'a>(app_handle: &'a tauri::AppHandle) -> tauri::WindowBuilder<'a> {
+pub fn create_window<'a>(
+    app_handle: &'a tauri::AppHandle,
+    lang: String,
+) -> tauri::WindowBuilder<'a> {
     tauri::WindowBuilder::new(
         app_handle,
         "settings",
         tauri::WindowUrl::App(
             format!(
                 "settings.html?lang={}&path={}",
-                "ru",
+                lang,
                 Encoded(SETTINGS_PATH)
             )
             .into(),
         ),
     )
-    .title("Settings — WHU")
+    .title(format!("{} — WHU", t!("settings.title")))
 }
