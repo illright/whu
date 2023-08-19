@@ -1,7 +1,11 @@
 import { linear } from "svelte/easing";
 import { tweened } from "svelte/motion";
-import type { Readable } from "svelte/store";
+import { get, type Readable } from "svelte/store";
 import { formatDuration } from "date-fns";
+import { enGB as en, ru } from "date-fns/locale";
+import { _, locale } from "svelte-i18n";
+
+const locales = { en, ru };
 
 export interface Timer extends Readable<number> {
   start: () => void;
@@ -42,6 +46,7 @@ export function formatTime(timeSeconds: number) {
       ].filter(Boolean),
       zero: true,
       delimiter: "#",
-    }).split("#")
+      locale: locales[(get(locale) ?? "en") as keyof typeof locales],
+    }).split("#"),
   );
 }
