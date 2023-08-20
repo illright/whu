@@ -1,8 +1,17 @@
 tray:
-  next_break: Следующий перерыв
+  next_short_break: Следующий мини-перерыв
+  next_long_break: Следующий длинный перерыв
   in_about: примерно через
-  skip_to_next_break: Запустить следующий перерыв сейчас
-  time_until_break: Время до перерыва
+  after: через
+
+  short_breaks:
+    one: мини-перерыв
+    few: мини-перерыва
+    many: мини-перерывов
+    other: мини-перерывов
+
+  skip_to_next_short_break: Запустить следующий мини-перерыв сейчас
+  skip_to_next_long_break: Запустить следующий длинный перерыв сейчас
   settings: Настройки
   quit: Закрыть
 
@@ -87,7 +96,7 @@ break:
   skip: Пропустить
 
 break-ideas:
-  mini:
+  short:
     water: Сходите за стаканом воды.
     look-horizontal: "Медленно посмотрите налево, затем направо."
     look-vertical: "Медленно посмотрите вверх, затем вниз."

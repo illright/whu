@@ -1,10 +1,17 @@
 tray:
-  next_break: Next break
+  next_short_break: Next short break
+  next_long_break: Next long break
   in_about: in about
+  after: after
 
-  skip_to_next_break: Skip to the next break
-  # ↓ Placeholder, shouldn't normally appear
-  time_until_break: Time until break
+  short_breaks:
+    one: short break
+    few: null
+    many: null
+    other: short breaks
+
+  skip_to_next_short_break: Skip to the next short break
+  skip_to_next_long_break: Skip to the next long break
   settings: Settings
   quit: Quit
 
@@ -86,11 +93,10 @@ break:
     few: null
     many: null
     other: remaining
-
   skip: Skip
 
 break-ideas:
-  mini:
+  short:
     water: Go grab a glass of water.
     look-horizontal: "Slowly look all the way left, then right."
     look-vertical: "Slowly look all the way up, then down."

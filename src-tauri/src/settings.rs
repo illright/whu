@@ -7,9 +7,11 @@ use urlencoding::Encoded;
 
 const SETTINGS_PATH: &str = "settings.json";
 pub const SHORT_BREAK_PERIOD: &str = "short_break_period";
+pub const LONG_BREAK_PERIOD: &str = "long_break_period";
 
 static DEFAULTS_U64: phf::Map<&'static str, u64> = phf_map! {
-    "short_break_period" => 5 * 60,
+    "short_break_period" => 20 * 60, // seconds
+    "long_break_period" => 2, // short breaks in between
 };
 
 pub fn get_u64(app_handle: &AppHandle, key: &str) -> u64 {
