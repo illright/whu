@@ -83,8 +83,8 @@ devDependencies:
     specifier: ^0.4.1
     version: 0.4.1(prettier-plugin-svelte@3.0.0)(prettier@3.0.0)
   sharp:
-    specifier: ^0.32.4
-    version: 0.32.4
+    specifier: ^0.32.6
+    version: 0.32.6
   svelte:
     specifier: ^4.1.1
     version: 4.1.1
@@ -2214,8 +2214,8 @@ packages:
       lru-cache: 6.0.0
     dev: true
 
-  /sharp@0.32.4:
-    resolution: {integrity: sha512-exUnZewqVZC6UXqXuQ8fyJJv0M968feBi04jb9GcUHrWtkRoAKnbJt8IfwT4NJs7FskArbJ14JAFGVuooszoGg==}
+  /sharp@0.32.6:
+    resolution: {integrity: sha512-KyLTWwgcR9Oe4d9HwCwNM2l7+J0dUQwn/yf7S0EnTtb0eVS4RxO0eUSvxPtzT4F3SY+C4K6fqdv/DO27sJ/v/w==}
     engines: {node: '>=14.15.0'}
     requiresBuild: true
     dependencies:
